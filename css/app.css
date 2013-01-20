@@ -1,0 +1,98 @@
+body {
+  margin: 0;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+#map {
+  width: 100%;
+}
+
+.notes-container {
+  width: 360px;
+  padding: 20px;
+}
+
+#notes, #notes-show{
+  display: none;
+  color: white;
+  background-color: #3D3D3D;
+  opacity: 0.7;
+}
+
+#notes a, #notes-show a{
+  color: white;
+  font-weight: bold;
+}
+
+#notes{
+  width: 100%;
+}
+
+#notes h1{
+  background: url(../img/library.png) no-repeat 10px center;
+  padding-left: 50px;
+}
+
+#notes-show{
+  float: right;
+  width: 50px;
+  text-align: center;
+}
+
+.library h2{
+  font-size: 1.8em;
+}
+
+.box {
+  margin-top: 0.5em;
+  padding: 0.5em;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+}
+
+.box-close {
+  float: right;
+  padding: 4px 5px 0 0;
+  text-align: center;
+  width: 18px;
+  height: 14px;
+  font: 16px/14px Tahoma, Verdana, sans-serif;
+  text-decoration: none;
+}
+
+.feedback {
+  background: url(../img/debut_light.png) repeat 0 0;
+  border: 1px solid #e6e6e6;
+}
+
+.plan {
+  padding-left: 40px;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 1.2em;
+}
+
+.keep {
+  background: url(../img/happy.png) no-repeat 10px center;
+  background-color: #ceeaae;
+  border-color: #73a738;
+}
+
+.close {
+  background: url(../img/sad.png) no-repeat 10px center;
+  background-color: #eeb1b1;
+  border-color: #a50000;
+}
+
+.reduced {
+  background: url(../img/sad.png) no-repeat 10px center;
+  background-color: #fdd4a6;
+  border-color: #cb7e2b;
+}
+
+.relocate {
+  background: url(../img/sad.png) no-repeat 10px center;
+  background-color: #c2e3ff;
+  border-color: #90b1cd;
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Save Newcastle Libraries</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+    <!--[if lte IE 8]><link rel="stylesheet" href="js/leaflet/leaflet.ie.css" /><![endif]-->
+    <link rel="stylesheet" href="css/app.css" />
+
+  </head>
+
+  <body>
+    <div id="map"></div>
+    <div id="notes-show" class="box"><a href="#show-info">+ Info</a></div>
+    <div id="notes" class="box">
+      <a class="box-close" href="#close-info">×</a>
+      <h1>Save Newcastle Libraries</h1>
+
+      <p>Newcastle City Council plans to close down 10 libraries across
+         the city as part of its next budget proposal. This represents
+         the closure of more than half of the existing branches across
+         Newcastle.</p>
+
+      <p>This map shows how the different branches would be affected, based 
+        on the <a href="http://www.newcastle.gov.uk/sites/drupalncc.newcastle.gov.uk/files/wwwfileroot/your-council/budget_and_annual_report/budget_2016_-_9_-_library_network_reduction_0.pdf">Library Network Reduction</a> (PDF 115Kb) Proposal.</p>
+
+      <p>Click on a branch to see how to contact your local councillor to raise your concerns, as well as other ways to get involved.</p>
+      
+      <p>Visit <a target="_blank" href="http://savenewcastlelibraries.org">SaveNewcastleLibraries.org</a> to sign the petition and keep up to date.</p>
+      <p>Made with love by <a href="https://twitter.com/amercader">@amercader</a></p>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="data/ncl-council-libraries.js"></script>
+    <script src="js/mustache/mustache.js"></script>
+    <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

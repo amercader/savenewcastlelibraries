@@ -1,0 +1,1 @@
+java -jar ../closure/compiler.jar --js=js/leaflet/leaflet.js --js=js/mustache/mustache.js --js=data/ncl-council-libraries.js --js=js/app.js --js_output_file=js/build.js
