@@ -1,5 +1,13 @@
 $(document).ready(function(){
 
+  var getParameterByName = function(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)')
+                        .exec(window.location.search);
+    return match ?
+           decodeURIComponent(match[1].replace(/\+/g, ' '))
+           : null;
+    }
+
   var popupContent = "<div class='library'>" +
   "<h2>{{properties.name}}</h2>" +
   "<div class='plan box {{properties.plan}}'>{{properties.plan_msg}}</div>" +
@@ -47,7 +55,7 @@ $(document).ready(function(){
   var map = L.map('map').setView([54.9789, -1.5664], 12);
   var mapUrl = "http://a.tiles.mapbox.com/v3/amercader.map-6wq525r7/{z}/{x}/{y}.png";
 
-  var attribution = "Map data &copy; " + new Date().getFullYear() + " OpenStreetMap contributors, " + 
+  var attribution = "Map data &copy; " + new Date().getFullYear() + " OpenStreetMap contributors, " +
   "Tiles Courtesy of <a href='http://www.mapbox.com/' target='_blank'>MapBox</a>, " +
   "Map Icons by <a target='_blank' href='http://mapicons.nicolasmollet.com/'>Nicolas Mollet</a>";
   var bg = new L.TileLayer(mapUrl, {attribution: attribution ,subdomains: '1234'});
@@ -95,6 +103,8 @@ $(document).ready(function(){
     }
   }).addTo(map);
 
+  var showInfo = !(getParameterByName("info") == "false");
+
   var NotesContainer = L.Control.extend({
     options: {
         position: 'topright'
@@ -112,8 +122,15 @@ $(document).ready(function(){
           $("#notes").show();
         });
 
+        if (showInfo) {
+          $("#notes").show();
+        } else {
+          $("#notes-show").show();
+        }
+
         $(container).append($("#notes-show"));
-        $(container).append($("#notes").show());
+        $(container).append($("#notes"));
+
 
         return container;
     }
