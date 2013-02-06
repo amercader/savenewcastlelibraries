@@ -28,13 +28,21 @@
       <p>Click on a branch to see how to contact your local councillor to raise your concerns, as well as other ways to get involved.</p>
       
       <p>Visit <a target="_blank" href="http://savenewcastlelibraries.org">SaveNewcastleLibraries.org</a> to sign the petition and keep up to date.</p>
+      <hr/>
+      <p><strong>Update:</strong> These layers show information extracted from the <a href="https://www.gov.uk/government/publications/english-indices-of-deprivation-2010" target="_blank">English Indices of Deprivation</a> for 2010, from the Department for Communities and Local Government. Darker colors show more deprived areas.
+      </p>
+      <ul class="layers">
+        <li><input type="radio" name="layer" data-layer="imd" id="layer-imd"/><label for="layer-imd">Index of Multiple Deprivation 2010 (Overall)</label></li>
+        <li><input type="radio" name="layer" data-layer="imd_edu" id="layer-imd_edu"/><label for="layer-imd_edu">Education, Skills and Training Domain 2010</label></li>
+        <li><input type="radio" name="layer" data-layer="none" id="layer-none"/><label for="layer-none">None</label></li>
+      </ul>
       <p>Made with love by <a href="https://twitter.com/amercader">@amercader</a>. Sources are on <a target="_blank" href="https://github.com/amercader/savenewcastlelibraries">GitHub</a>.</p>
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="data/ncl-council-libraries.js"></script>
     <script src="js/mustache/mustache.js"></script>
     <script src="js/leaflet/leaflet.js"></script>
+    <script src="js/topojson.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

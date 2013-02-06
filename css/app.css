@@ -39,6 +39,18 @@ body {
   text-align: center;
 }
 
+.layers li{
+  list-style-type: none;
+}
+
+.layers label,input{
+  vertical-align: middle;
+}
+
+.layers label{
+  margin-left: 5px;
+}
+
 .library h2{
   font-size: 1.8em;
 }
