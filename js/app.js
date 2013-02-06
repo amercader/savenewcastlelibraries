@@ -46,13 +46,31 @@ $(document).ready(function(){
 
   var popupTemplate = Mustache.compile(popupContent);
 
+  var popupIMDContent = "<div>" +
+  "{{#properties.imd}}" +
+  "<div>IMD 2010 (Overall): {{properties.imd}}</div>" +
+  "{{/properties.imd}}" +
+  "{{^properties.imd}}" +
+  "<div>IMD 2010 (Overall): No data</div>" +
+  "{{/properties.imd}}" +
+  "{{#properties.imd_edu}}" +
+  "<div>IMD 2010 (Education, Skills and Training): {{properties.imd_edu}}</div>" +
+  "{{/properties.imd_edu}}" +
+  "{{^properties.imd_edu}}" +
+  "<div>IMD 2010 (Education, Skills and Training): No data</div>" +
+  "{{/properties.imd_edu}}" +
+  "<div>LSOA Id: {{properties.lsoa}}</div>" +
+  "</div>";
+
+  var popupIMDTemplate = Mustache.compile(popupIMDContent);
+
   var resize = function(){
     $("#map").height($(document).height());
   };
   resize();
   $(window).resize(resize);
 
-  var map = L.map('map').setView([54.9789, -1.5664], 12);
+  var map = L.map('map').setView([55, -1.59], 12);
   var mapUrl = "http://a.tiles.mapbox.com/v3/amercader.map-6wq525r7/{z}/{x}/{y}.png";
 
   var attribution = "Map data &copy; " + new Date().getFullYear() + " OpenStreetMap contributors, " +
@@ -68,40 +86,112 @@ $(document).ready(function(){
           popupAnchor:  [0, -20]
       }
   });
+  $.getJSON('data/ncl-council-libraries.geojson', function (data) {
+    L.geoJson(data, {
+      onEachFeature: function(feature, layer){
+        if (feature.properties) {
+          feature.properties.keep = (feature.properties.plan == "keep");
+          var msg;
+          switch (feature.properties.plan){
+            case "keep":
+              msg = "Not affected";
+              break;
+            case "close":
+              msg = "Closing on " + feature.properties.due;
+              break;
+            case "reduced":
+              msg = "Reduced service";
+              break;
+            case "relocate":
+              msg = "Relocated";
+              break;
+          };
+          feature.properties.plan_msg = msg;
 
-  L.geoJson(libraries, {
+          layer.bindPopup(popupTemplate(feature),
+            {"minWidth": 400});
+        }
+      },
+      pointToLayer: function (feature, latLng) {
+          return new L.Marker(latLng, {
+            icon: new BaseIcon({
+              iconUrl: "img/library-" + feature.properties.plan + ".png"
+            })
+          })
+      }
+    }).addTo(map);
+  });
+
+  var currentLayer = getParameterByName("l") || "imd";
+  var getIMDColor = function(value) {
+    /*
+     * Natural Breaks (Jenks) for 7 classes, calculated on QGIS
+     * Colors by http://colorbrewer2.org
+     * */
+    layer = currentLayer || "imd";
+    var series = {
+      "imd": {
+        "breaks": [58.52, 47.6, 36.53, 26, 15.72, 5.77, 2.32],
+        "colors": ["#99000D", "#CB181D", "#EF3B2C", "#FB6A4A", "#FC9272", "#FCBBA1", "#FEE5D9" ]
+      },
+      "imd_edu": {
+        "breaks": [74.36, 60.21, 47.82, 33.97, 20.39, 7.88, 0.88],
+        "colors": ["#99000D", "#CB181D", "#EF3B2C", "#FB6A4A", "#FC9272", "#FCBBA1", "#FEE5D9" ]
+      }
+    }
+
+
+    for (var i=0; i < series[layer]["breaks"].length; i++){
+      if (value > series[layer]["breaks"][i]){
+        return series[layer]["colors"][i];
+      }
+    }
+    return "#FFFFFF";
+  }
+
+  var getIMDStyle = function(feature) {
+
+    return {
+      color: '#666',
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.5,
+      fillColor: (feature.properties) ?
+        getIMDColor(feature.properties[currentLayer]) :
+        null
+    }
+  };
+
+  var lsoaLayer = L.geoJson(null, {
+    style: getIMDStyle,
     onEachFeature: function(feature, layer){
       if (feature.properties) {
-        feature.properties.keep = (feature.properties.plan == "keep");
-        var msg;
-        switch (feature.properties.plan){
-          case "keep":
-            msg = "Not affected";
-            break;
-          case "close":
-            msg = "Closing on " + feature.properties.due;
-            break;
-          case "reduced":
-            msg = "Reduced service";
-            break;
-          case "relocate":
-            msg = "Relocated";
-            break;
-        };
-        feature.properties.plan_msg = msg;
-
-        layer.bindPopup(popupTemplate(feature),
-          {"minWidth": 400});
+        layer.bindPopup(popupIMDTemplate(feature));
       }
-    },
-    pointToLayer: function (feature, latLng) {
-        return new L.Marker(latLng, {
-          icon: new BaseIcon({
-            iconUrl: "img/library-" + feature.properties.plan + ".png"
-          })
-        })
     }
+
   }).addTo(map);
+
+  $.getJSON('data/lsoa-imd.topojson', function (data) {
+    var lsoaGeojson = topojson.object(data, data.objects["lsoa-imd"]);
+
+    var featureCollection = {
+      "type": "FeatureCollection",
+      "features": []
+    };
+
+    // We need to translate the output of topojson to a FeatureCollection to
+    // preserve the properties
+    for (var i = 0; i < lsoaGeojson.geometries.length; i++) {
+      featureCollection.features.push({
+        "type":"Feature",
+        "geometry": lsoaGeojson.geometries[i],
+        "properties": lsoaGeojson.geometries[i].properties
+      });
+    }
+
+    lsoaLayer.addData(featureCollection);
+  });
 
   var showInfo = !(getParameterByName("info") == "false");
 
@@ -128,9 +218,23 @@ $(document).ready(function(){
           $("#notes-show").show();
         }
 
+        $("#layer-" + currentLayer).attr("checked", true);
+        $(".layers input").click(function(){
+          currentLayer = $(this).data("layer");
+          if (currentLayer == "none") {
+            map.removeLayer(lsoaLayer);
+          } else {
+            if (!map.hasLayer(lsoaLayer)){
+              map.addLayer(lsoaLayer);
+            } else {
+              lsoaLayer.setStyle(getIMDStyle);
+            }
+          }
+        });
+
+
         $(container).append($("#notes-show"));
         $(container).append($("#notes"));
-
 
         return container;
     }
