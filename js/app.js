@@ -71,10 +71,14 @@ $(document).ready(function(){
   $(window).resize(resize);
 
   var map = L.map('map').setView([55, -1.59], 12);
-  var mapUrl = "http://a.tiles.mapbox.com/v3/amercader.map-6wq525r7/{z}/{x}/{y}.png";
+  //var mapUrl = "http://a.tiles.mapbox.com/v3/amercader.map-6wq525r7/{z}/{x}/{y}.png";
 
-  var attribution = "Map data &copy; " + new Date().getFullYear() + " OpenStreetMap contributors, " +
-  "Tiles Courtesy of <a href='http://www.mapbox.com/' target='_blank'>MapBox</a>, " +
+  //var attribution = "Map data &copy; " + new Date().getFullYear() + " OpenStreetMap contributors, " +
+  //"Tiles Courtesy of <a href='http://www.mapbox.com/' target='_blank'>MapBox</a>, " +
+  
+   // MapQuest OpenStreetMap base map
+  var mapUrl = "http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png";
+  var attribution = 'Map data &copy; 2011 OpenStreetMap contributors, Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">' +
   "Map Icons by <a target='_blank' href='http://mapicons.nicolasmollet.com/'>Nicolas Mollet</a>";
   var bg = new L.TileLayer(mapUrl, {attribution: attribution ,subdomains: '1234'});
   map.addLayer(bg);
